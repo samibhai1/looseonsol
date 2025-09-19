@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$LOOSE - Art Unleashed</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-main: #D4D4D4;
+            --blue-primary: #4A90E2;
+            --blue-dark: #2B5A8A;
+            --pink-accent: #FF6B9D;
+            --orange-accent: #FFA726;
+            --white: #FFFFFF;
+            --text-primary: #1A1A2E;
+            --text-secondary: #6B7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(74, 144, 226, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .social-links svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+            transition: fill 0.3s ease;
+        }
+
+        .social-links a:hover svg {
+            fill: var(--blue-primary);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Sections */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .hero {
+            padding-top: 8rem;
+            text-align: center;
+        }
+
+        /* Mascot Container - OPTIMIZED */
+        .mascot-container {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .mascot-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Typography */
+        .hero-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark), var(--pink-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Contract Address - FIXED */
+        .contract-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 90%;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .contract-address {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        /* Buy Button */
+        .buy-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--pink-accent), var(--orange-accent));
+            color: var(--white);
+            text-decoration: none;
+            padding: 1.2rem 3rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Steps Grid */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        /* Tokenomics Grid */
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--blue-primary), var(--pink-accent));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 2rem;
+            width: 15px;
+            height: 15px;
+            background: var(--blue-primary);
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 3px var(--blue-primary);
+        }
+
+        /* Community Links */
+        .community-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .community-link {
+            display: block;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--text-primary);
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .community-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            color: var(--blue-primary);
+        }
+
+        .community-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 1rem;
+            fill: var(--blue-primary);
+            transition: fill 0.3s ease;
+        }
+
+        .community-link:hover .community-icon {
+            fill: var(--blue-dark);
+        }
+
+        /* Links */
+        a {
+            color: var(--blue-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--blue-dark);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .mascot-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .contract-address {
+                font-size: 0.8rem;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .timeline::before {
+                left: 0.5rem;
+            }
+
+            .timeline-item::before {
+                left: -1.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#how-to-buy">How to Buy</a></li>
+                <li><a href="#tokenomics">Tokenomics</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#community">Community</a></li>
+            </ul>
+            <div class="social-links">
+                <a href="https://dexscreener.com/solana/6mccx3tkp1dwxf74fmciw2gtpqt9zhu3tkxzvm8jjbwb" target="_blank" title="DEX Screener">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/>
+                        <path d="M7 14l3-3 2 2 5-5"/>
+                        <circle cx="7" cy="14" r="1"/>
+                        <circle cx="10" cy="11" r="1"/>
+                        <circle cx="12" cy="13" r="1"/>
+                        <circle cx="17" cy="8" r="1"/>
+                    </svg>
+                </a>
+                <a href="https://x.com/i/communities/1968326067367682282" target="_blank" title="X Community">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        <path d="M21 21v-2a4 4 0 0 0-3-3.85"/>
+                    </svg>
+                </a>
+                <a href="https://x.com/mariaartpro" target="_blank" title="X Profile">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+            </div>
+            <button class="mobile-menu-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="section hero">
+        <div class="mascot-container">
+            <img src="images/mascot-hero.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h1 class="hero-title">LOOSE</h1>
+        
+        <div class="contract-card">
+            <div class="contract-address" id="contractAddress">
+                GSSPA5zDNqpmao8BFnUHnnQrc3tgUeoVSesXtHhxpump
+            </div>
+            <button class="copy-btn" onclick="copyContract()">Copy</button>
+        </div>
+        
+        <a href="https://jup.ag/swap/SOL-GSSPA5zDNqpmao8BFnUHnnQrc3tgUeoVSesXtHhxpump" target="_blank" class="buy-btn">
+            Buy $LOOSE
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="mascot-container">
+            <img src="images/mascot-about.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">Meet LOOSE</h2>
+        
+        <div class="card">
+            <p>Loose is our inner degen cut loose to express feelings in the most free way possible, connecting us with our deepest emotions through art. <a href="https://x.com/mariaartpro" target="_blank">mariaartpro</a> streams the creative process live every day on PumpFun.</p>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section class="section" id="how-to-buy">
+        <div class="mascot-container">
+            <img src="images/mascot-buy.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">How to Get $LOOSE</h2>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Get Phantom Wallet</h3>
+                <p>Download and set up your Phantom wallet</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Buy some SOL</h3>
+                <p>Purchase Solana through your wallet or exchange</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Go to Jupiter DEX</h3>
+                <p>Visit Jupiter for the best swap rates</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Swap SOL for $LOOSE</h3>
+                <p>Use contract address above</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section class="section" id="tokenomics">
+        <div class="mascot-container">
+            <img src="images/mascot-tokenomics.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">The Details</h2>
+        
+        <div class="tokenomics-grid">
+            <div class="card">
+                <h3>Supply</h3>
+                <p><strong>1,000,000,000 $LOOSE</strong><br>
+                Total supply is fixed</p>
+            </div>
+            <div class="card">
+                <h3>Launch</h3>
+                <p>Fair launched by <a href="https://x.com/mariaartpro" target="_blank">mariaartpro</a><br>
+                Community endorsed</p>
+            </div>
+            <div class="card">
+                <h3>Liquidity</h3>
+                <p><strong>Liquidity pool burned (100%)</strong><br>
+                Not bundled - completely transparent</p>
+            </div>
+            <div class="card">
+                <h3>Community</h3>
+                <p><strong>100% community driven</strong><br>
+                Built by and for the community</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="section" id="roadmap">
+        <div class="mascot-container">
+            <img src="images/mascot-roadmap.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">What's Coming</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Fair launch on PumpFun + daily live streams</h3>
+                <p>Launch complete with ongoing daily creative sessions</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Community giveaways</h3>
+                <p>Rewarding early supporters and active community members</p>
+            </div>
+            <div class="timeline-item">
+                <h3>NFT collection for community</h3>
+                <p>Exclusive art pieces for $LOOSE holders</p>
+            </div>
+            <div class="timeline-item">
+                <h3>IP rights expansion</h3>
+                <p>Exploring broader use cases for the LOOSE character</p>
+            </div>
+            <div class="timeline-item">
+                <h3>More updates coming</h3>
+                <p>Stay tuned for community-driven developments</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="section" id="community">
+        <div class="mascot-container">
+            <img src="images/mascot-community.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">Join the Community</h2>
+        
+        <div class="community-links">
+            <a href="https://x.com/mariaartpro" target="_blank" class="community-link">
+                <svg class="community-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="6" r="4"/>
+                    <path d="M12 2C10.89 2 10 2.89 10 4s.89 2 2 2 2-.89 2-2-.89-2-2-2zM20 18c0-5.33-2.67-10-8-10s-8 4.67-8 10"/>
+                    <circle cx="6" cy="17" r="1.5"/>
+                    <circle cx="12" cy="15" r="1.5"/>
+                    <circle cx="18" cy="17" r="1.5"/>
+                    <path d="M4 20h16M6 18l2-2 4 2 4-2 2 2"/>
+                </svg>
+                <h3>X Profile</h3>
+                <p>Follow mariaartpro for daily updates</p>
+            </a>
+            <a href="https://x.com/i/communities/1968326067367682282" target="_blank" class="community-link">
+                <svg class="community-icon" viewBox="0 0 24 24">
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <path d="M21 21v-2a4 4 0 0 0-3-3.85"/>
+                </svg>
+                <h3>X Community</h3>
+                <p>Join the $LOOSE community discussions</p>
+            </a>
+            <a href="https://dexscreener.com/solana/6mccx3tkp1dwxf74fmciw2gtpqt9zhu3tkxzvm8jjbwb" target="_blank" class="community-link">
+                <svg class="community-icon" viewBox="0 0 24 24">
+                    <path d="M3 3v18h18V3H3zm16 16H5V5h14v14z"/>
+                    <path d="M7 14l3-3 2 2 5-5"/>
+                    <circle cx="7" cy="14" r="1"/>
+                    <circle cx="10" cy="11" r="1"/>
+                    <circle cx="12" cy="13" r="1"/>
+                    <circle cx="17" cy="8" r="1"/>
+                </svg>
+                <h3>DEX Screener</h3>
+                <p>Track $LOOSE price and trading data</p>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile menu if open
+                document.querySelector('.nav-links').classList.remove('active');
+            });
+        });
+
+        // Copy contract address function
+        function copyContract() {
+            const contractAddress = document.getElementById('contractAddress').textContent.trim();
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            navigator.clipboard.writeText(contractAddress).then(function() {
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(function() {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = contractAddress;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                setTimeout(function() {
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

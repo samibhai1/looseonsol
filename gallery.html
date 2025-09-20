@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$LOOSE - Art Gallery</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-main: #D4D4D4;
+            --blue-primary: #4A90E2;
+            --blue-dark: #2B5A8A;
+            --pink-accent: #FF6B9D;
+            --orange-accent: #FFA726;
+            --white: #FFFFFF;
+            --text-primary: #1A1A2E;
+            --text-secondary: #6B7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-brand {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--blue-primary), var(--pink-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue-primary);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        /* Gallery Header */
+        .gallery-header {
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .gallery-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--pink-accent), var(--orange-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        /* Masonry Grid */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 20px;
+            column-fill: balance;
+        }
+
+        .masonry-item {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+            break-inside: avoid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .masonry-item:hover {
+            transform: scale(1.02);
+        }
+
+        .artwork-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .artwork-card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 60vw;
+            max-height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            background: var(--white);
+            color: var(--text-primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: var(--pink-accent);
+            color: var(--white);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--pink-accent);
+            color: var(--white);
+        }
+
+        .lightbox-prev {
+            left: -70px;
+        }
+
+        .lightbox-next {
+            right: -70px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+
+            .gallery-title {
+                font-size: 2.5rem;
+            }
+
+            .gallery-header {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .gallery-container {
+                padding: 0 1rem 3rem;
+            }
+
+            .lightbox-content {
+                max-width: 95%;
+                max-height: 90%;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+            }
+
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+            }
+
+            .lightbox-prev {
+                left: 10px;
+            }
+
+            .lightbox-next {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--pink-accent);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">LOOSE</a>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#how-to-buy">How to Buy</a></li>
+                <li><a href="index.html#tokenomics">Tokenomics</a></li>
+                <li><a href="index.html#roadmap">Roadmap</a></li>
+                <li><a href="index.html#community">Community</a></li>
+            </ul>
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Gallery Header -->
+    <section class="gallery-header">
+        <h1 class="gallery-title">Art Gallery</h1>
+        <p class="gallery-subtitle">Explore the creative journey of $LOOSE through live art and digital expressions</p>
+    </section>
+
+    <!-- Gallery Container -->
+    <section class="gallery-container">
+        <div class="masonry-grid" id="gallery-grid">
+            <!-- Gallery items will be loaded here -->
+            <div class="loading">Loading artwork...</div>
+        </div>
+        
+        <!-- Gallery Note -->
+        <div style="text-align: center; margin-top: 3rem; padding: 0 2rem;">
+            <p style="font-size: 0.9rem; color: var(--text-secondary); font-style: italic;">More artwork added regularly from daily live streams</p>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">×</button>
+            <button class="lightbox-nav lightbox-prev" onclick="previousImage()">‹</button>
+            <img class="lightbox-image" id="lightbox-image" src="" alt="Artwork">
+            <button class="lightbox-nav lightbox-next" onclick="nextImage()">›</button>
+        </div>
+    </div>
+
+    <script>
+        // Gallery data - Add your artwork files here
+        const artworks = [
+            { src: 'images/gallery1.jpg', alt: 'LOOSE Artwork 1' },
+            { src: 'images/gallery2.jpg', alt: 'LOOSE Artwork 2' },
+            { src: 'images/gallery3.jpg', alt: 'LOOSE Artwork 3' },
+            { src: 'images/gallery4.jpg', alt: 'LOOSE Artwork 4' },
+            { src: 'images/gallery5.jpg', alt: 'LOOSE Artwork 5' },
+            { src: 'images/gallery6.jpg', alt: 'LOOSE Artwork 6' },
+            { src: 'images/gallery7.jpg', alt: 'LOOSE Artwork 7' },
+            { src: 'images/gallery8.jpg', alt: 'LOOSE Artwork 8' },
+            { src: 'images/gallery9.jpg', alt: 'LOOSE Artwork 9' },
+            { src: 'images/gallery10.jpg', alt: 'LOOSE Artwork 10' },
+            { src: 'images/gallery11.jpg', alt: 'LOOSE Artwork 11' },
+            { src: 'images/gallery12.jpg', alt: 'LOOSE Artwork 12' }
+        ];
+
+        let currentImageIndex = 0;
+
+        // Load gallery
+        function loadGallery() {
+            const galleryGrid = document.getElementById('gallery-grid');
+            galleryGrid.innerHTML = '';
+
+            artworks.forEach((artwork, index) => {
+                const item = document.createElement('div');
+                item.className = 'masonry-item';
+                item.onclick = () => openLightbox(index);
+
+                item.innerHTML = `
+                    <div class="artwork-card">
+                        <img class="artwork-image" src="${artwork.src}" alt="${artwork.alt}" loading="lazy">
+                    </div>
+                `;
+
+                galleryGrid.appendChild(item);
+            });
+        }
+
+        // Lightbox functions
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            
+            lightboxImage.src = artworks[index].src;
+            lightboxImage.alt = artworks[index].alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % artworks.length;
+            const lightboxImage = document.getElementById('lightbox-image');
+            lightboxImage.src = artworks[currentImageIndex].src;
+            lightboxImage.alt = artworks[currentImageIndex].alt;
+        }
+
+        function previousImage() {
+            currentImageIndex = (currentImageIndex - 1 + artworks.length) % artworks.length;
+            const lightboxImage = document.getElementById('lightbox-image');
+            lightboxImage.src = artworks[currentImageIndex].src;
+            lightboxImage.alt = artworks[currentImageIndex].alt;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    nextImage();
+                } else if (e.key === 'ArrowLeft') {
+                    previousImage();
+                }
+            }
+        });
+
+        // Close lightbox when clicking outside image
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Load gallery when page loads
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>

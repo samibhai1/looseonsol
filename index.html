@@ -350,6 +350,85 @@
             box-shadow: 0 0 0 3px var(--blue-primary);
         }
 
+        /* Art Gallery */
+        .gallery {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .gallery::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--pink-accent), var(--orange-accent));
+            border-radius: 3px;
+        }
+
+        .gallery-item {
+            position: relative;
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            background: var(--pink-accent);
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            box-shadow: 0 0 0 3px var(--pink-accent);
+        }
+
+        .artwork-container {
+            width: 300px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .artwork-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .artwork-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--pink-accent), var(--orange-accent));
+            color: var(--white);
+            text-decoration: none;
+            padding: 1.2rem 3rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .gallery-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            border: 2px solid var(--pink-accent);
+            background: var(--white);
+            color: var(--pink-accent);
+        }
+
         /* Community Links */
         .community-links {
             display: grid;
@@ -437,6 +516,23 @@
             .timeline-item::before {
                 left: -1.75rem;
             }
+
+            .gallery {
+                padding-left: 2rem;
+            }
+
+            .gallery::before {
+                left: 0.5rem;
+            }
+
+            .gallery-item::before {
+                left: -1.75rem;
+            }
+
+            .artwork-container {
+                width: 250px;
+                height: 250px;
+            }
         }
     </style>
 </head>
@@ -450,6 +546,7 @@
                 <li><a href="#how-to-buy">How to Buy</a></li>
                 <li><a href="#tokenomics">Tokenomics</a></li>
                 <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#community">Community</a></li>
             </ul>
             <div class="social-links">
@@ -607,6 +704,44 @@
                 <h3>More updates coming</h3>
                 <p>Stay tuned for community-driven developments</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Art Gallery Section -->
+    <section class="section" id="gallery">
+        <div class="mascot-container">
+            <img src="images/mascot-community.png" alt="LOOSE mascot" class="mascot-img">
+        </div>
+        
+        <h2 class="section-title">Art Gallery</h2>
+        
+        <div class="gallery">
+            <div class="gallery-item">
+                <div class="artwork-container">
+                    <img src="images/art1.jpg" alt="LOOSE artwork" class="artwork-img">
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="artwork-container">
+                    <img src="images/art2.jpg" alt="LOOSE artwork" class="artwork-img">
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="artwork-container">
+                    <img src="images/art3.jpg" alt="LOOSE artwork" class="artwork-img">
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="artwork-container">
+                    <img src="images/art4.jpg" alt="LOOSE artwork" class="artwork-img">
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="gallery.html" class="gallery-btn">
+                View Full Gallery
+            </a>
         </div>
     </section>
 
